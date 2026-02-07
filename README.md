@@ -124,3 +124,6 @@ Musagali Kundyz
 Dias Mukhametkali
 
 Nurdaulet Amangos
+
+## GitHub Repository: 
+https://github.com/Kundyz882/digital-goods-store-dapp.git
