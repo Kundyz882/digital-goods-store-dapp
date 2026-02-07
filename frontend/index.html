@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Digital Goods Store</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h2>Digital Goods Store</h2>
+
+    <!-- ===== AUTH SCREEN ===== -->
+    <section id="screenAuth" class="screen">
+      <div class="authHeader">
+        <div class="badge">Sepolia • MetaMask Login</div>
+        <div class="muted">Sign in with wallet, then create profile (Sign up).</div>
+      </div>
+
+      <div class="grid2">
+        <div class="form">
+          <h3>Sign In (Wallet)</h3>
+          <button onclick="connect()" style="width:100%">Connect MetaMask</button>
+
+          <div class="authInfo">
+            <div>Account: <span id="authAccount">Not connected</span></div>
+            <div>Network: <span id="authNetwork">—</span></div>
+          </div>
+
+          <small class="hint">
+            Different wallet addresses = different accounts.
+          </small>
+        </div>
+
+        <div class="form">
+          <h3>Sign Up (Profile)</h3>
+          <input id="nickname" placeholder="Nickname (e.g., Kundyz)" />
+          <input id="avatar" placeholder="Avatar URL (optional)" />
+          <button onclick="saveProfileAndEnter()" style="width:100%">Save profile & Enter</button>
+
+          <div class="profilePreview">
+            <div class="avatar" id="avatarBox">DS</div>
+            <div>
+              <div class="muted">Profile name:</div>
+              <div class="big" id="profileNameAuth">Not registered</div>
+            </div>
+          </div>
+
+          <small class="hint">
+            Profile is saved per wallet address (localStorage).
+          </small>
+        </div>
+      </div>
+
+      <div class="ctaRow">
+        <button class="primary" onclick="enterApp()">Enter Store</button>
+        <button class="ghost" onclick="disconnect()">Disconnect</button>
+      </div>
+
+      <small class="hint center">
+        Tip: Switching accounts is done in MetaMask. The site auto-updates.
+      </small>
+    </section>
+
+    <!-- ===== APP SCREEN ===== -->
+    <section id="screenApp" class="screen hidden">
+      <div class="topbar">
+        <div class="topLeft">
+          <div class="appTitle">Digital Goods Store</div>
+          <div class="mutedSmall">
+            Account: <span id="account">—</span> • Profile: <span id="profileNameTop">—</span><br/>
+            Tokens: <span id="tokenBalance">0</span> DSR
+          </div>
+        </div>
+
+        <div class="topRight">
+          <button class="ghost" onclick="backToAuth()">Back</button>
+          <button class="ghost" onclick="disconnect()">Sign out</button>
+        </div>
+      </div>
+
+      <!-- Segmented toggle -->
+      <div class="segmented">
+        <button id="segMarket" class="seg active" onclick="showTab('market')">Marketplace</button>
+        <button id="segMy" class="seg" onclick="showTab('my')">My Account</button>
+        <div id="segLine" class="segLine"></div>
+      </div>
+
+      <div id="tab_market" class="tabpage">
+
+  <div class="form">
+    <h3>Create Product</h3>
+
+    <input id="title" placeholder="Title (e.g., iPhone 13 Pro 256GB)" />
+    <input id="description" placeholder="Description (short details)" />
+    <input id="image" placeholder="Image URL (cover) or ipfs://..." />
+
+    <select id="category">
+      <option value="0">Smartphones</option>
+      <option value="1">Laptops</option>
+      <option value="2">Tablets</option>
+      <option value="3">Accessories</option>
+      <option value="4">Other</option>
+    </select>
+
+    <input id="price" placeholder="Price in ETH (e.g., 0.01)" />
+    <div class="row">
+      <button onclick="createProduct()" style="flex:1">Create</button>
+      <button class="ghost" onclick="clearCreateForm()" style="flex:1">Clear</button>
+    </div>
+
+    <small class="hint">After creation, click Refresh in Browse.</small>
+  </div>
+
+  <div class="form" style="margin-top:16px;">
+    <h3>Browse</h3>
+
+    <div class="row">
+      <select id="filterCategory" onchange="applyFilters()">
+        <option value="-1">All categories</option>
+        <option value="0">Smartphones</option>
+        <option value="1">Laptops</option>
+        <option value="2">Tablets</option>
+        <option value="3">Accessories</option>
+        <option value="4">Other</option>
+      </select>
+
+      <input id="search" placeholder="Search title..." />
+    </div>
+
+    <div class="row">
+      <button onclick="refreshProducts()" style="flex:1">Refresh</button>
+      <button class="ghost" onclick="clearFilters()" style="flex:1">Clear</button>
+    </div>
+
+    <small class="hint">Search is instant (cached). Refresh loads from blockchain.</small>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div id="products" class="products" style="margin-top:16px;"></div>
+</div>
+
+
+      <!-- MY TAB -->
+      <div id="tab_my" class="tabpage hidden">
+        <div class="grid2">
+          <div class="form">
+            <h3>My Listings</h3>
+            <button onclick="loadMyListings()" style="width:100%">Load my listings</button>
+            <div id="myListings" class="list"></div>
+          </div>
+
+          <div class="form">
+            <h3>My Purchases</h3>
+            <button onclick="loadMyPurchases()" style="width:100%">Load my purchases</button>
+            <div id="myPurchases" class="list"></div>
+          </div>
+        </div>
+
+        <div class="form" style="margin-top: 18px;">
+          <h3>Seller Balance</h3>
+          <div class="rowline">Pending ETH: <span id="pendingEth">0</span></div>
+          <button onclick="withdraw()" style="width:100%; margin-top:10px;">Withdraw</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        Educational blockchain project — Sepolia Testnet
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
